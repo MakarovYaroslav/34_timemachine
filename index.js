@@ -1,5 +1,6 @@
 var TIMEOUT_IN_SECS = 3 * 60
-var TEMPLATE = '<h1><span class="js-timer-minutes">00</span>:<span class="js-timer-seconds">00</span></h1>'
+var TEMPLATE = '<h1 style = "margin: 0 auto"><span class="js-timer-minutes">00</span>:<span class="js-timer-seconds">00</span></h1>'
+var ALERT_TIMEOUT_IN_MILLISECONDS = 30000
 
 function padZero(number){
   return ("00" + String(number)).slice(-2);
@@ -53,7 +54,7 @@ class TimerWidget{
     // adds HTML tag to current page
     this.timerContainer = document.createElement('div')
 
-    this.timerContainer.setAttribute("style", "height: 100px;")
+    this.timerContainer.setAttribute("style", "height: 30px; width: 70px; z-index: 21; position: fixed; left: 2%; top:5%; background-color: white; font-size: small; border-radius: 10px;")
     this.timerContainer.innerHTML = TEMPLATE
 
     rootTag.insertBefore(this.timerContainer, rootTag.firstChild)
@@ -88,6 +89,10 @@ function main(){
   function handleIntervalTick(){
     var secsLeft = timer.calculateSecsLeft()
     timerWiget.update(secsLeft)
+    if (secsLeft === 0) {
+        timerWiget.unmount()
+        startAlert()
+    }
   }
 
   function handleVisibilityChange(){
@@ -101,6 +106,13 @@ function main(){
     }
   }
 
+  function startAlert(){
+    clearInterval(intervalId)
+    alert("Еще не все велосипеды изобретены. Вперёд! За работу!")
+    var timerId = setInterval(function() {
+      alert("Работа лучшее лекарство от всех бед. Так почему же ты всё еще тут?");
+    }, ALERT_TIMEOUT_IN_MILLISECONDS);
+  }
   // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
   document.addEventListener("visibilitychange", handleVisibilityChange, false);
   handleVisibilityChange()
