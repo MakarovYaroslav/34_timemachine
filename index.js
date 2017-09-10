@@ -91,7 +91,11 @@ function main(){
     timerWiget.update(secsLeft)
     if (secsLeft === 0) {
         timerWiget.unmount()
-        startAlert()
+        clearInterval(intervalId)
+        randomAlert()
+        var timerId = setInterval(function() {
+          randomAlert()
+        }, ALERT_TIMEOUT_IN_MILLISECONDS);
     }
   }
 
@@ -106,12 +110,12 @@ function main(){
     }
   }
 
-  function startAlert(){
-    clearInterval(intervalId)
-    alert("Еще не все велосипеды изобретены. Вперёд! За работу!")
-    var timerId = setInterval(function() {
-      alert("Работа лучшее лекарство от всех бед. Так почему же ты всё еще тут?");
-    }, ALERT_TIMEOUT_IN_MILLISECONDS);
+  function randomAlert(){
+    var messages = ["Еще не все велосипеды изобретены. Вперёд! За работу!",
+                    "Работа лучшее лекарство от всех бед. Так почему же ты всё еще тут?",
+                    "Теперь применяй эти знания на практике!"];
+    var randomNumber = Math.floor(Math.random() * messages.length);
+    alert(messages[randomNumber])
   }
   // https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
   document.addEventListener("visibilitychange", handleVisibilityChange, false);
